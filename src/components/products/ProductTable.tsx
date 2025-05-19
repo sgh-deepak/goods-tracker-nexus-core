@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import {
   Table,
@@ -17,6 +16,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Product } from "@/lib/data";
 import { useToast } from "@/components/ui/use-toast";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 interface ProductTableProps {
   products: Product[];
@@ -28,6 +28,7 @@ export function ProductTable({ products, onEdit, onDelete }: ProductTableProps) 
   const { toast } = useToast();
   const [sortColumn, setSortColumn] = useState<keyof Product>("name");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+  const { formatPrice } = useCurrency();
 
   const handleSort = (column: keyof Product) => {
     if (sortColumn === column) {
@@ -99,7 +100,7 @@ export function ProductTable({ products, onEdit, onDelete }: ProductTableProps) 
   const handleQuickView = (product: Product) => {
     toast({
       title: product.name,
-      description: `SKU: ${product.sku} | Stock: ${product.stockLevel} | Price: $${product.price.toFixed(2)}`,
+      description: `SKU: ${product.sku} | Stock: ${product.stockLevel} | Price: ${formatPrice(product.price)}`,
     });
   };
 
@@ -181,7 +182,7 @@ export function ProductTable({ products, onEdit, onDelete }: ProductTableProps) 
                 <TableCell className={product.stockLevel <= product.reorderPoint ? "text-red-500" : ""}>
                   {product.stockLevel}
                 </TableCell>
-                <TableCell>${product.price.toFixed(2)}</TableCell>
+                <TableCell>{formatPrice(product.price)}</TableCell>
                 <TableCell className="text-right">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>

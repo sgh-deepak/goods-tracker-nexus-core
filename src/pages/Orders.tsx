@@ -22,12 +22,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Order, orders as initialOrders } from '@/lib/data';
 import { format } from 'date-fns';
+import { useCurrency } from '@/contexts/CurrencyContext';
 
 const Orders = () => {
   const [orders, setOrders] = useState<Order[]>(initialOrders);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
+  const { formatPrice } = useCurrency();
   
   const filteredOrders = orders.filter(order => 
     order.orderNumber.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -120,8 +122,8 @@ const Orders = () => {
                         <TableRow key={index}>
                           <TableCell>{item.productName}</TableCell>
                           <TableCell className="text-right">{item.quantity}</TableCell>
-                          <TableCell className="text-right">${item.price.toFixed(2)}</TableCell>
-                          <TableCell className="text-right">${(item.price * item.quantity).toFixed(2)}</TableCell>
+                          <TableCell className="text-right">{formatPrice(item.price)}</TableCell>
+                          <TableCell className="text-right">{formatPrice(item.price * item.quantity)}</TableCell>
                         </TableRow>
                       ))}
                       <TableRow>
@@ -129,7 +131,7 @@ const Orders = () => {
                           Total:
                         </TableCell>
                         <TableCell className="text-right font-bold">
-                          ${selectedOrder.total.toFixed(2)}
+                          {formatPrice(selectedOrder.total)}
                         </TableCell>
                       </TableRow>
                     </TableBody>

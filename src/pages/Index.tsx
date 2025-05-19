@@ -6,8 +6,11 @@ import { StatsCard } from '@/components/dashboard/StatsCard';
 import { StockMovementChart, CategoryDistributionChart } from '@/components/dashboard/InventoryChart';
 import { RecentActivity } from '@/components/dashboard/RecentActivity';
 import { dashboardStats, products, orders, suppliers, stockMovements } from '@/lib/data';
+import { useCurrency } from '@/contexts/CurrencyContext';
 
 const Index = () => {
+  const { formatPrice } = useCurrency();
+  
   // Recent activities
   const recentActivities = [
     {
@@ -94,7 +97,7 @@ const Index = () => {
             <div className="rounded-lg border p-6">
               <h3 className="font-semibold mb-4">Inventory Value</h3>
               <div className="text-3xl font-bold text-primary">
-                ${Math.round(dashboardStats.totalInventoryValue).toLocaleString()}
+                {formatPrice(Math.round(dashboardStats.totalInventoryValue))}
               </div>
               <p className="text-sm text-muted-foreground mt-1">
                 Total cost value of current stock
@@ -103,7 +106,7 @@ const Index = () => {
             <div className="rounded-lg border p-6">
               <h3 className="font-semibold mb-4">Sales Value</h3>
               <div className="text-3xl font-bold text-green-500">
-                ${Math.round(dashboardStats.totalSalesValue).toLocaleString()}
+                {formatPrice(Math.round(dashboardStats.totalSalesValue))}
               </div>
               <p className="text-sm text-muted-foreground mt-1">
                 Total sales this month

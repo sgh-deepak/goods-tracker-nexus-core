@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Order } from "@/lib/data";
 import { format } from "date-fns";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 interface OrderTableProps {
   orders: Order[];
@@ -18,6 +19,8 @@ interface OrderTableProps {
 }
 
 export function OrderTable({ orders, onViewDetails }: OrderTableProps) {
+  const { formatPrice } = useCurrency();
+  
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'pending':
@@ -63,7 +66,7 @@ export function OrderTable({ orders, onViewDetails }: OrderTableProps) {
                 <TableCell>{order.customer}</TableCell>
                 <TableCell>{format(order.date, 'MMM d, yyyy')}</TableCell>
                 <TableCell>{order.items.length}</TableCell>
-                <TableCell>${order.total.toFixed(2)}</TableCell>
+                <TableCell>{formatPrice(order.total)}</TableCell>
                 <TableCell>{getStatusBadge(order.status)}</TableCell>
                 <TableCell className="text-right">
                   <Button 
